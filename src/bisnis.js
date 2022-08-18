@@ -36,7 +36,7 @@ const extractDeal = selector => {
         // .replace(/\s\s+/9, '')
         .trim();
     const author = "GOZAL"
-    const sumber = "market.bisnis.com"
+    const sumber = "https://market.bisnis.com/"
 
     return {
         judul,

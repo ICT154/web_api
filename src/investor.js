@@ -14,28 +14,33 @@ const fethHtml = async url => {
 };
 
 const extractDeal = selector => {
-
-    const judul = selector.find(".ket")
-        .find('div[class="sp-hl linkto-black"] > h1')
+    const judul = selector.find(".col-md-9")
+        .find('p[class="font-summary-semibold mb5"]')
         .text()
+        // .replace(/\s\s+/9, '')
+        .trim();
+
+    const deskripsi = selector.find(".col-md-9")
+        .find('p[class="font-summary mb10"]')
+        .text()
+        // .replace(/\s\s+/9, '')
         .trim();
 
     const gambar = selector.find("img")
-        // .find('div[class="lozad imgnya-listberita"] > img')
-        // .attr('src')
-        .attr('data-src')
-        // .text();
+        .attr('src')
+        // .replace(/\s\s+/9, '')
         .trim();
 
     const link = selector.find("a")
         .attr('href')
+        // .replace(/\s\s+/9, '')
         .trim();
-
     const author = "GOZAL"
-    const sumber = "https://investasi.kontan.co.id/"
+    const sumber = "https://investor.id/market"
+
     return {
         judul,
-        // deskripsi,
+        deskripsi,
         gambar,
         link,
         author,
@@ -44,26 +49,27 @@ const extractDeal = selector => {
 };
 
 
-const api_kontan = async () => {
+
+const api_investor = async () => {
     const steamUrl =
-        "https://investasi.kontan.co.id/";
+        "https://investor.id/market";
 
     const html = await fethHtml(steamUrl);
 
     const selector = cheerio.load(html);
 
-    const searchResults = selector(".list-berita").find(
-        "#list-news > li"
+    const searchResults = selector(".loadarticles").find(
+        "div[class='row']"
     );
 
-    const kontan = searchResults
+    const investor = searchResults
         .map((idx, el) => {
             const elementSelector = selector(el);
             return extractDeal(elementSelector);
         })
         .get();
 
-    return kontan;
+    return investor;
 };
 
-module.exports = api_kontan;
+module.exports = api_investor;
